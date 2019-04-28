@@ -1,0 +1,55 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm text-center">
+                <mat-tab-group>
+                    <mat-tab label="Cliente Soluclic">
+                        <mat-card>
+                            <mat-card-header>
+                                <div style="margin-left: 43%" mat-card-avatar class="text-center">
+                                    <img style="width: 8em" class="img-circle" src="https://material.angular.io/assets/img/examples/shiba1.jpg">
+                                </div>
+                                <div class="space-180"></div>
+                            </mat-card-header>
+                            <mat-card-title>Carlos Estarita</mat-card-title>
+                            <mat-card-content>
+                                <address>
+                                <mat-chip>
+                                    Teléfono:
+                                </mat-chip>123123123 <br>
+                                <mat-chip>
+                                    Estado del servicio:
+                                </mat-chip> En proceso <br>
+                                <mat-chip>
+                                    Email:
+                                </mat-chip> test@hotmail.com <br>
+                              </address>
+                                <div class="space-10"></div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-tab>
+                    <mat-tab label="Documento">
+                        <mat-card>
+                            <img style="border: 1px solid #cecece" class="thumbnail w-50" src="./assets/images/test.jpeg">
+                            <form>
+                                <div class="form-group">
+                                    <mat-form-field class="w-100">
+                                        <mat-select placeholder="Validar documento">
+                                            <mat-option value="1">Aceptar</mat-option>
+                                            <mat-option value="2">Rechazar</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group">
+                                    <button mat-raised-button color="primary" class="btn-block col-md-4 primary-bg-color">
+                                    Guardar cambios
+                                  </button>
+                                </div>
+                            </form>
+                        </mat-card>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</section>
