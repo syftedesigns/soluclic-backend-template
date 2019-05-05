@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { DocumentsApprovalComponent } from '../../../shared/documents-approval/documents-approval.component';
+import { DatabaseService } from '../../../../services/firebase/database.service';
+import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
+import { ObjectDocument } from '../../../../classes/docs.class';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-legacy',
@@ -8,38 +11,57 @@ import { DocumentsApprovalComponent } from '../../../shared/documents-approval/d
   styles: []
 })
 export class LegacyComponent implements OnInit {
-  ELEMENT_DATA: any[] = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  ];
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-  dataSource: any[];
-  constructor(public dialog: MatDialog) {
-    this.dataSource = this.ELEMENT_DATA;
-
+  displayedColumns: string[] = ['Nombre', 'Tipo de documento', 'Estado del documento', 'Fecha', 'Action'];
+  dataSource = new MatTableDataSource<ObjectDocument>();
+  temporalTable: ObjectDocument[] = [];
+  constructor(public dialog: MatDialog, private _fb: DatabaseService, private matSnack: MatSnackBar) {
   }
 
   ngOnInit() {
+    // Ya firebase nos da la información solo debemos mandar un timeout
+    // para que refresque el array
+    setTimeout(() => {
+      this.temporalTable = this._fb.ArrayDocs;
+      this.dataSource.data = this.temporalTable;
+      this.dataSource._updateChangeSubscription();
+    }, 1500);
   }
-  popupLegal() {
+  popupLegal(legalDoc: ObjectDocument = null, index: number) {
     const modalProfile = this.dialog.open(DocumentsApprovalComponent, {
       width: '1024px',
       height: '600px',
+      data: legalDoc
     });
 
     // Para estar a la escucha de cuando cierre el modal
     modalProfile.afterClosed().subscribe(
-      (result: any): void => {
-        console.log('fue cerrado el modal');
+      (): void => {
+        this.temporalTable = [];
+        this.dataSource.data = null;
+        setTimeout(() => {
+          this.temporalTable = this._fb.ArrayDocs;
+          this.dataSource.data = this.temporalTable;
+        }, 300);
       }
     );
+  }
+  deleteDoc(objectDoc: ObjectDocument, index: number) {
+    swal({
+      title: 'Estás seguro?',
+      text: 'Si eliminas este documento, la persona deberá enviarlo nuevamente!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: false,
+    })
+    .then(async (willDelete) => {
+      if (willDelete) {
+        const deleted = await this._fb.removeElement(objectDoc);
+        if (deleted) {
+          this.temporalTable.splice(index, 1);
+          this.dataSource.data = this.temporalTable;
+          this.matSnack.open('Datos actualizados', null, {duration: 3000});
+        }
+      }
+    });
   }
 }

@@ -15,13 +15,13 @@ import { RouterModule } from '@angular/router';
     BreadcrumbsComponent,
     FooterComponent,
     MenuComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   exports: [
     BreadcrumbsComponent,
     FooterComponent,
     MenuComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
 })
 export class StaticModule { }

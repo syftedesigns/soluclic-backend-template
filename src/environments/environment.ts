@@ -3,7 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyCMtc17DAyN0r4dRwL5nd798MvmCf93KYg',
+    authDomain: 'soluclic-ba766.firebaseapp.com',
+    databaseURL: 'https://soluclic-ba766.firebaseio.com',
+    projectId: 'soluclic-ba766',
+    storageBucket: 'soluclic-ba766.appspot.com',
+    messagingSenderId: '692724292042'
+  },
+  mapbox: {
+    token: 'pk.eyJ1IjoiaW5nY2FybG9zZSIsImEiOiJjanVoNDR3cmkwdnY2NDlwcHE5czU2MmhiIn0._ztgGFw7U3hBvZz9qsMA0A'
+  }
 };
 
 /*

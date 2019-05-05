@@ -698,5 +698,10 @@ table {
     width: 100% !important
 }
 
+mgl-map {
+    height: 100% !important;
+    width: 100% !important;
+}
+
 
 /* End custom theme */

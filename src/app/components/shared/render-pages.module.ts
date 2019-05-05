@@ -9,12 +9,20 @@ import { WarningComponent } from './warning/warning.component';
 import { AngularMaterialModule } from '../../angular-material.module';
 import { FormsModule } from '@angular/forms';
 import { UploadProductsComponent } from './upload-products/upload-products.component';
+import { BooleanPipe } from '../../services/pipes/boolean.pipe';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { environment } from '../../../environments/environment';
+import { StaticMapComponent } from './store-coords/static-map.component';
 
 @NgModule({
   imports: [
     CommonModule,
     AngularMaterialModule,
-    FormsModule
+    FormsModule,
+    NgxMapboxGLModule.withConfig({
+      accessToken: environment.mapbox.token,
+      geocoderAccessToken: environment.mapbox.token
+    }),
   ],
   declarations: [
     ProfileComponent,
@@ -23,7 +31,9 @@ import { UploadProductsComponent } from './upload-products/upload-products.compo
     EditServicesComponent,
     StoreCoordsComponent,
     WarningComponent,
-    UploadProductsComponent
+    UploadProductsComponent,
+    BooleanPipe,
+    StaticMapComponent
   ],
   exports: [
     ProfileComponent,
@@ -32,7 +42,9 @@ import { UploadProductsComponent } from './upload-products/upload-products.compo
     EditServicesComponent,
     StoreCoordsComponent,
     WarningComponent,
-    UploadProductsComponent
+    UploadProductsComponent,
+    BooleanPipe,
+    StaticMapComponent
   ],
   entryComponents: [
     ProfileComponent,
@@ -41,7 +53,8 @@ import { UploadProductsComponent } from './upload-products/upload-products.compo
     EditServicesComponent,
     StoreCoordsComponent,
     WarningComponent,
-    UploadProductsComponent
+    UploadProductsComponent,
+    StaticMapComponent
   ]
 })
 export class RenderPagesModule { }

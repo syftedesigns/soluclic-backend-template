@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { EditServicesComponent } from '../../shared/edit-services/edit-services.component';
+import { ObjectService } from '../../../classes/services.class';
+import { ClientServicesService } from '../../../services/api/client-services.service';
+import { PartialObserver } from 'rxjs';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-services',
@@ -8,38 +12,90 @@ import { EditServicesComponent } from '../../shared/edit-services/edit-services.
   styles: []
 })
 export class ServicesComponent implements OnInit {
-  ELEMENT_DATA: any[] = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  ];
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'action'];
-  dataSource: any[];
-  constructor(public dialog: MatDialog) {
-    this.dataSource = this.ELEMENT_DATA;
-
+  displayedColumns: string[] = ['#', 'Service', 'action'];
+  temporalTable: ObjectService[] = [];
+  dataSource = new MatTableDataSource<ObjectService>();
+  constructor(public dialog: MatDialog, private _srv: ClientServicesService,
+    private snackBar: MatSnackBar) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const Service: ObjectService[] = await this.loadServices();
+    if (!Service) {
+      console.log('no hay datos');
+      return;
+    } else {
+      this.dataSource.data = Service;
+      this.temporalTable = Service;
+      console.log(this.temporalTable);
+    }
   }
-  editService() {
+  editService(objectService: ObjectService = null) {
     const modalProfile = this.dialog.open(EditServicesComponent, {
       width: '400px',
       height: '220px',
+      data: objectService
     });
 
     // Para estar a la escucha de cuando cierre el modal
     modalProfile.afterClosed().subscribe(
       (result: any): void => {
-        console.log('fue cerrado el modal');
+        if (result) {
+          if (!result.updating) {
+            this.temporalTable.push(result.data);
+            this.dataSource.data = this.temporalTable;
+            this.dataSource._updateChangeSubscription();
+          } else {
+            // updating
+            for (const row of this.temporalTable) {
+              if (row.srv_id === result.data.srv_id) {
+                row.srv_name = result.data.srv_name;
+              }
+            }
+            this.dataSource.data = this.temporalTable;
+            this.dataSource._updateChangeSubscription();
+          }
+        }
       }
     );
+  }
+  loadServices(): Promise<ObjectService[]> {
+    return new Promise((resolve, reject) => {
+      this._srv.selectRole('selectServices').subscribe(
+        (resp: PartialObserver<any> | any): void => {
+          if (resp.status) {
+            resolve(resp.data);
+            return;
+          } else {
+            resolve(null);
+          }
+        }
+      );
+    });
+  }
+  ConfirmDeleteItem(objectSrv: ObjectService): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      swal({
+        title: 'Estás seguro?',
+        text: 'Esta opción no se puede deshacer',
+        icon: 'warning',
+        buttons: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          this._srv.removeRole('removeService', objectSrv.srv_id)
+            .subscribe(deleted => {
+                if (deleted.status) {
+                  this.temporalTable.splice(this.temporalTable.indexOf(objectSrv), 1);
+                  this.dataSource.data = this.temporalTable;
+                  this.dataSource._updateChangeSubscription();
+                  this.snackBar.open('Servicio eliminado', null, {
+                    duration: 3000
+                  });
+                }
+            });
+        }
+      });
+    });
   }
 }

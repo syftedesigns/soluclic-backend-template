@@ -45,7 +45,7 @@ import { RenderPagesModule } from '../shared/render-pages.module';
     HomeComponent,
     DeliveryComponent,
     EmergenciaComponent,
-    PushComponent
+    PushComponent,
   ],
   entryComponents: [
     RoleComponent
