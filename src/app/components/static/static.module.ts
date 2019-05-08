@@ -5,6 +5,7 @@ import { FooterComponent } from './footer/footer.component';
 import { MenuComponent } from './menu/menu.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
+import { ThumbnailPipe } from '../../services/pipes/thumbnail.pipe';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
     FooterComponent,
     MenuComponent,
     SidebarComponent,
+    ThumbnailPipe
   ],
   exports: [
     BreadcrumbsComponent,

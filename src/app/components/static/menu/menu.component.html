@@ -1,7 +1,7 @@
 <header class="topbar">
     <nav class="navbar top-navbar navbar-expand-md navbar-light">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">
+            <a [routerLink]="['/']" class="navbar-brand">
                 <b>
                     <img src="./assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                     <img src="./assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
@@ -70,13 +70,15 @@
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="../assets/images/users/1.jpg" alt="user" class="profile-pic" />
+                        <img [src]="Thumbnail | thumbnail" [alt]="_auth.userData.username" class="profile-pic" />
                     </a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
-                                    <div class="u-img"><img src="../assets/images/users/1.jpg" alt="user"></div>
+                                    <div class="u-img">
+                                        <img [src]="Thumbnail | thumbnail" [alt]="_auth.userData.username">
+                                    </div>
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -84,7 +86,7 @@
                             <li><a target="_blank" href="#"><i class="mdi mdi-android"></i> App play store</a></li>
                             <li><a target="_blank" href="#"><i class="mdi mdi-apple"></i> App App store</a></li>
                             <li><a target="_blank" href="#"><i class="mdi mdi-credit-card-multiple"></i> Pasarela de pago</a></li>
-                            <li><a href="#"><i class="fa fa-power-off"></i>Salir</a></li>
+                            <li><a (click)="_auth.logout();"><i class="fa fa-power-off"></i>Salir</a></li>
                         </ul>
                     </div>
                 </li>

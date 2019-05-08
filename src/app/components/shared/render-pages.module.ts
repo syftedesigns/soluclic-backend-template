@@ -13,12 +13,14 @@ import { BooleanPipe } from '../../services/pipes/boolean.pipe';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { environment } from '../../../environments/environment';
 import { StaticMapComponent } from './store-coords/static-map.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
     AngularMaterialModule,
     FormsModule,
+    RouterModule,
     NgxMapboxGLModule.withConfig({
       accessToken: environment.mapbox.token,
       geocoderAccessToken: environment.mapbox.token

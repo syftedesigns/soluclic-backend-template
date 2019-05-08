@@ -1,6 +1,10 @@
 <mat-card class="example-card">
     <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
+        <div mat-card-avatar>
+            <a [href]="thumbProfile" target="_blank">
+                <img class="img-thumbnail" [src]="thumbProfile" [alt]="Profile.firstname + Profile.lastname">
+            </a>
+        </div>
         <mat-card-title>Carlos Estarita</mat-card-title>
         <mat-card-subtitle>
             <div class="container">
@@ -37,7 +41,7 @@
                                 Nombre:
                             </mat-chip>
                             <span>
-                              Carlos Estarita
+                              {{Profile.firstname}}&nbsp;{{Profile.lastname}}
                             </span>
                         </div>
                         <div class="col-sm">
@@ -45,7 +49,7 @@
                                 Email:
                             </mat-chip>
                             <span>
-                            test@hotmail.com
+                            {{Profile.email}}
                           </span>
                         </div>
                     </div>
@@ -58,20 +62,22 @@
                                 Teléfono:
                             </mat-chip>
                             <span>
-                            123123123
+                            {{Profile.telephone}}
                           </span>
                         </div>
                         <div style="position: relative; left: -7%" class="col-sm">
-                            <mat-chip>
-                                Estado:
+
+                            Estado:
+                            <mat-chip *ngIf="Profile.status === '0'" color="default" selected>
+                                Desactivado
                             </mat-chip>
-                            <span>
-                            Activo
-                          </span>
+                            <mat-chip *ngIf="Profile.status === '1'" class="bg-success text-white">
+                                Activado
+                            </mat-chip>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm">
+                <div *ngIf="addr !== null" class="col-sm">
                     <h5 class="text-center">
                         Datos de ubicación
                     </h5>
@@ -81,7 +87,11 @@
                                 Dirección:
                             </mat-chip>
                             <span>
-                              Altagracia San josé a santa cecilia
+                                {{addr.address_1}}
+                            </span>
+                            <br *ngIf="addr.address_2 !== ''">
+                            <span *ngIf="addr.address_2 !== ''">
+                                {{addr.address_2}}
                             </span>
                         </div>
                         <div class="col-sm">
@@ -89,7 +99,7 @@
                                 Ciudad:
                             </mat-chip>
                             <span>
-                            Caracas
+                            {{addr.city}}
                           </span>
                         </div>
                     </div>
@@ -97,10 +107,10 @@
                     <div class="row text-center">
                         <div class="col-sm text-left">
                             <mat-chip>
-                                País:
+                                País & Región:
                             </mat-chip>
                             <span>
-                            Venezuela
+                            {{addr.iso_code_3}}&nbsp;-&nbsp;{{addr.name}}
                           </span>
                         </div>
                         <div class="col-sm">
@@ -108,7 +118,7 @@
                                 Código postal / zip:
                             </mat-chip>
                             <span>
-                            123123
+                            {{addr.postcode}}
                           </span>
                         </div>
                     </div>
@@ -169,20 +179,20 @@
                         Habilitación de usuario&nbsp;
                         <span matTooltip="Asegurate que el cliente cargo los documentos y habilitalos, una vez hecho ese paso, asegurate de activar/desactivar el cliente según sea correspondiente para que pueda trabajar en Soluclic" class="mdi mdi-alert-circle warn-color"></span>
                     </h5>
-                    <form>
+                    <form ngNativeValidate (ngSubmit)="activateUser(activation);" #activation="ngForm">
                         <mat-form-field class="w-100">
-                            <mat-select placeholder="Usuario capacitado">
-                                <mat-option value="option">Activado</mat-option>
-                                <mat-option value="option">Desactivado</mat-option>
+                            <mat-select required (valueChange)="canActivateUser($event)" ngModel name="user_active" placeholder="Usuario capacitado">
+                                <mat-option value="1">Activado</mat-option>
+                                <mat-option value="0">Desactivado</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field class="w-100">
-                            <mat-select placeholder="Vehiculo capacitado">
-                                <mat-option value="option">Activado</mat-option>
-                                <mat-option value="option">Desactivado</mat-option>
+                            <mat-select required ngModel name="vehicle_active" placeholder="Vehiculo capacitado">
+                                <mat-option value="1">Activado</mat-option>
+                                <mat-option value="0">Desactivado</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button mat-raised-button class="primary-bg-color btn-block text-white col-md-4">Actualizar</button>
+                        <button type="submit" [disabled]="!canActivate" color="warn" selected mat-raised-button class="btn-block text-white col-md-4">Actualizar</button>
                     </form>
                 </div>
             </div>

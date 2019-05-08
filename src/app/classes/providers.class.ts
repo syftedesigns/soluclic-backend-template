@@ -12,7 +12,7 @@ export class ObjectSoluclicProvider {
         public address_id: number,
         public custom_field: string,
         public ip: number | string,
-        public status: boolean,
+        public status: string,
         public safe: string,
         public date_added: Date,
         public company: string,

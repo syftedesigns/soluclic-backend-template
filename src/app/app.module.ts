@@ -20,6 +20,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 // Map
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { AuthGuard } from './guard/auth.guard';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,7 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
     APP_ROUTES,
     AngularMaterialModule,
     StaticModule,
+    FormsModule,
     BrowserAnimationsModule,
     RenderPagesModule,
     ServicesModule,
@@ -46,7 +49,9 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
       geocoderAccessToken: environment.mapbox.token
     }),
   ],
-  providers: [],
+  providers: [
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

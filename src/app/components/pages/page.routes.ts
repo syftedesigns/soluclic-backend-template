@@ -16,7 +16,7 @@ import { PushComponent } from './push/push.component';
 const routes: Routes = [
     {
         path: '',
-        component: DashboardComponent,
+        component: EmployersComponent,
         data: {Title: 'Soluclic | Dashboard'}
     },
     {

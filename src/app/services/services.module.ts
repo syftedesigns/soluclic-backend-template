@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ClientServicesService } from './api/client-services.service';
 import { RolesService } from './api/roles.service';
 import { DatabaseService } from './firebase/database.service';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { DatabaseService } from './firebase/database.service';
   providers: [
     ClientServicesService,
     RolesService,
-    DatabaseService
+    DatabaseService,
+    AuthService
   ],
   declarations: []
 })

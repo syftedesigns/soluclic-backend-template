@@ -47,6 +47,18 @@ export class DatabaseService {
     });
   }));
   }
+  getDocsByClientId(client_id: number) {
+    return this.db.list(`documentos`, ref =>
+    ref.orderByChild('client_id')
+    .equalTo(client_id))
+      .snapshotChanges()
+      .pipe(map(items => {
+        return items.map((docs: any) => {
+          return docs.payload.val();
+        });
+      }));
+
+  }
   getMapsMarkers() {
     return this.db.list(`sitios`)
       .snapshotChanges()

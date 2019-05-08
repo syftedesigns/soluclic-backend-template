@@ -91,4 +91,39 @@ export class ClientServicesService {
       })
     );
   }
+  public ClientAddr(operationType: string, addr_id: number) {
+    const url = `${API_SOLUCLIC}/providers.php?operationType=${operationType}&addr_id=${addr_id}`;
+    return this._http.get(url).pipe(
+      map((resp: any) => {
+        return resp;
+      }),
+      catchError( (err: any)  => {
+        console.error(err);
+        this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
+          duration: 5000,
+          panelClass: ['red-snackbar']
+        });
+        return new Observable<string | boolean>();
+      })
+    );
+  }
+  // Activar | Desactivar un usuario
+  public updateProvider(operationType: string, status: number) {
+    const url = `${API_SOLUCLIC}/providers.php?operationType=${operationType}`;
+    const form = new FormData();
+    form.append('STATUS', status.toString());
+    return this._http.post(url, form).pipe(
+      map((resp: any) => {
+        return resp;
+      }),
+      catchError( (err: any)  => {
+        console.error(err);
+        this.snackBar.open('Ops! We have problems to process your data. Please try again', null, {
+          duration: 5000,
+          panelClass: ['red-snackbar']
+        });
+        return new Observable<string | boolean>();
+      })
+    );
+  }
 }
